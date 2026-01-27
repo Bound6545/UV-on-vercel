@@ -12,7 +12,6 @@
     <script src="games.js"></script>
 
     <script>
-        // Prevent default context menu and inspection keys
         document.addEventListener('contextmenu', event => event.preventDefault());
         document.onkeydown = function(e) {
             if(e.keyCode == 123) return false;
@@ -189,7 +188,30 @@
 
         .logo-text { font-size: 5rem; font-weight: 900; letter-spacing: -4px; background: linear-gradient(180deg, var(--text-color) 20%, transparent 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px; animation: float 6s ease-in-out infinite; }
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-        .sub-text { font-family: 'Courier New', monospace; color: #888; margin-bottom: 40px; height: 24px; text-transform: lowercase; letter-spacing: 1px; font-size: 0.9rem; transition: opacity 0.8s ease-in-out; }
+        
+        .sub-text { font-family: 'Courier New', monospace; color: #888; margin-bottom: 5px; height: 24px; text-transform: lowercase; letter-spacing: 1px; font-size: 0.9rem; transition: opacity 0.8s ease-in-out; }
+        
+        .network-text {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.3);
+            margin-bottom: 5px;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+        }
+
+        .network-link {
+            font-size: 0.85rem;
+            color: #60a5fa; /* Blue accent */
+            text-decoration: none;
+            margin-bottom: 40px;
+            border-bottom: 1px solid transparent;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+        .network-link:hover {
+            color: #93c5fd;
+            border-bottom-color: #93c5fd;
+        }
         
         .search-container { width: 100%; max-width: 600px; position: relative; margin-bottom: 40px; transition: transform 0.4s var(--ease-spring); }
         .search-container:hover { transform: scale(1.02); }
@@ -456,6 +478,8 @@
         <div id="home" class="view active">
             <div class="logo-text">hunters proxy</div>
             <div class="sub-text" id="rotator">initializing...</div>
+            <div class="network-text">A site apart of infamous network.</div>
+            <a href="https://infamous-education.hotelconsuladoinn.com/" target="_blank" class="network-link">Visit Infamous Network</a>
             
             <div class="search-container">
                 <i class="fas fa-globe search-icon"></i>
@@ -847,14 +871,12 @@
         }
 
         function askNewTab() {
-            // New Tab Logic: Open default search engine homepage
             const engine = localStorage.getItem('hunters_search_engine') || 'brave';
             let homeUrl = 'https://search.brave.com/';
             if(engine === 'google') homeUrl = 'https://google.com/';
             if(engine === 'bing') homeUrl = 'https://bing.com/';
             if(engine === 'duckduckgo') homeUrl = 'https://duckduckgo.com/';
 
-            // Open tab with generic 'New Tab' name initially
             openGame(homeUrl, "New Tab");
         }
 
@@ -902,12 +924,10 @@
             const activeFrame = document.getElementById(`frame-${id}`);
             activeFrame.classList.add('active');
 
-            // Update Address Bar
             const addrBar = document.getElementById('browser-address-bar');
             if(tab.originalUrl && tab.originalUrl.includes('.')) {
                 addrBar.value = tab.originalUrl;
             } else {
-                // If it's a search engine homepage, show empty or placeholder
                 addrBar.value = '';
                 addrBar.placeholder = "Search or type a URL...";
             }
@@ -927,7 +947,6 @@
             }
         }
 
-        // ADDRESS BAR NAVIGATION
         document.getElementById('browser-address-bar').addEventListener('keydown', (e) => {
             if(e.key === 'Enter') {
                 const val = e.target.value;
@@ -936,10 +955,9 @@
                     const frame = document.getElementById(`frame-${activeTabId}`);
                     frame.src = proxyUrl;
                     
-                    // Simple name extraction for tab title
                     let newName = val.replace(/^https?:\/\//, '').replace(/^www\./, '').split('/')[0];
                     if(newName.length > 15) newName = newName.substring(0, 15) + '...';
-                    if(!val.includes('.')) newName = "Search"; // If search query
+                    if(!val.includes('.')) newName = "Search"; 
 
                     document.querySelector(`#tab-btn-${activeTabId} .tab-title`).innerText = newName;
                     
