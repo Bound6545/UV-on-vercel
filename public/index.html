@@ -60,11 +60,9 @@
             configureUV();
             registerSW();
             
-            // Load saved settings
             const savedEngine = localStorage.getItem('hunters_search_engine') || 'brave';
             updateSearchUI(savedEngine);
             
-            // Load Panic Settings
             const savedPanic = localStorage.getItem('hunters_panic_preset') || 'classroom';
             const panicSelect = document.getElementById('panic-preset');
             if(panicSelect) {
@@ -75,11 +73,9 @@
             const customInput = document.getElementById('panic-custom-input');
             if(customInput) customInput.value = savedCustom;
 
-            // Init Chat & Games
             initAIChat();
             renderGameLibrary();
 
-            // TRIGGER STARTUP NOTIFICATION
             showLoadNotification();
         });
 
@@ -292,21 +288,20 @@
         .spinner { width: 50px; height: 50px; border: 3px solid rgba(255,255,255,0.1); border-top: 3px solid #fff; border-radius: 50%; animation: spin 0.8s infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* --- ULTRA COMPACT SETTINGS PANEL --- */
+        /* --- GRID LAYOUT SETTINGS PANEL --- */
         .settings-panel { 
-            background: rgba(15, 15, 15, 0.85);
+            background: rgba(15, 15, 15, 0.9);
             backdrop-filter: blur(40px);
             -webkit-backdrop-filter: blur(40px);
-            padding: 15px; /* Reduced padding */
-            border-radius: 16px; 
+            padding: 20px; 
+            border-radius: 20px; 
             border: 1px solid rgba(255, 255, 255, 0.08); 
-            width: 380px; /* Reduced Width */
+            width: 480px; /* Slightly wider to fit grid */
             text-align: left; 
             box-shadow: 0 25px 60px rgba(0,0,0,0.6);
             opacity: 0;
             transform: scale(0.9) translateY(20px);
             animation: panelPopIn 0.6s var(--ease-spring) forwards;
-            /* Removed max-height/overflow to prevent scrollbars - it should fit naturally now */
         }
 
         @keyframes panelPopIn {
@@ -318,56 +313,55 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 10px; /* Reduced */
-            padding-bottom: 5px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
             border-bottom: 1px solid rgba(255,255,255,0.1);
         }
 
         .settings-header h2 {
-            font-size: 1.2rem; /* Smaller font */
+            font-size: 1.4rem;
             font-weight: 700;
             color: #fff;
             margin: 0;
         }
+        
+        /* Grid container for settings */
+        .settings-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
 
-        .setting-group { margin-bottom: 8px; } /* Tight spacing */
-        .setting-group:last-child { margin-bottom: 0; }
+        /* Span full width for specific items */
+        .setting-full { grid-column: span 2; }
+
+        .setting-group { margin-bottom: 0; } 
 
         .setting-label { 
-            color: #bbb; font-size: 0.75rem; font-weight: 600; margin-bottom: 4px; display: block; letter-spacing: 0.5px; text-transform: uppercase;
+            color: #bbb; font-size: 0.75rem; font-weight: 600; margin-bottom: 5px; display: block; letter-spacing: 0.5px; text-transform: uppercase;
         }
         
         .uid-display { 
             background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); 
-            padding: 6px 10px; border-radius: 8px; /* Compact */
-            font-family: 'Courier New', monospace; color: #999; font-size: 0.8rem; 
+            padding: 8px 10px; border-radius: 8px; 
+            font-family: 'Courier New', monospace; color: #999; font-size: 0.85rem; 
             display: flex; justify-content: space-between; align-items: center; 
         }
         
-        .btn-row { display: flex; gap: 6px; }
+        .btn-row { display: flex; gap: 8px; }
         
         .engine-btn { 
-            flex: 1; padding: 6px; font-size: 0.8rem; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; 
+            flex: 1; padding: 8px; font-size: 0.8rem; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; 
             background: rgba(255,255,255,0.05); color: #aaa; cursor: pointer; transition: 0.3s var(--ease-out); font-weight: 500;
         }
         .engine-btn:hover { background: rgba(255,255,255,0.15); color: #fff; }
         .engine-btn.selected { background: #fff; color: #000; border-color: #fff; }
         
-        .data-btn { 
-            flex: 1; padding: 6px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); 
-            color: #ddd; border-radius: 8px; cursor: pointer; transition: 0.3s var(--ease-out); font-size: 0.8rem; 
-            display: flex; align-items: center; justify-content: center; gap: 5px;
-        }
-        .data-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
-        
-        /* Grid for Options (Privacy/Visuals merged) */
-        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-        
         .nav-btn-settings {
             width: 100%; padding: 8px; background: rgba(255,255,255,0.03); 
             border: 1px solid rgba(255,255,255,0.08); color: #ccc; border-radius: 8px; 
             cursor: pointer; transition: 0.3s var(--ease-out); text-align: left; 
-            display: flex; align-items: center; gap: 8px; font-size: 0.8rem;
+            display: flex; align-items: center; gap: 8px; font-size: 0.8rem; margin-bottom: 5px;
         }
         .nav-btn-settings:hover { background: rgba(255,255,255,0.08); color: #fff; transform: translateX(2px); }
         .nav-btn-settings i { width: 15px; text-align: center; }
@@ -375,8 +369,8 @@
         .reset-btn { background: rgba(255, 80, 80, 0.1); color: #ff6b6b; border-color: rgba(255, 80, 80, 0.2); justify-content: center; }
         .reset-btn:hover { background: rgba(255, 80, 80, 0.2); color: #fff; transform: translateX(0); }
 
-        .panic-select { width: 100%; padding: 6px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); color: #fff; border-radius: 8px; outline: none; margin-bottom: 4px; font-size: 0.8rem; }
-        .panic-input { width: 100%; padding: 6px; margin-top: 4px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); color: #fff; border-radius: 8px; outline: none; display: none; font-size: 0.8rem; }
+        .panic-select { width: 100%; padding: 8px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); color: #fff; border-radius: 8px; outline: none; margin-bottom: 5px; font-size: 0.8rem; }
+        .panic-input { width: 100%; padding: 8px; margin-top: 5px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); color: #fff; border-radius: 8px; outline: none; display: none; font-size: 0.8rem; }
 
     </style>
 </head>
@@ -512,49 +506,53 @@
                     <h2>Settings</h2>
                 </div>
 
-                <div class="setting-group">
-                    <span class="setting-label">User ID</span>
-                    <div class="uid-display">
-                        <span id="user-uid">LOADING...</span>
-                        <button class="nav-btn" style="padding: 2px 8px; font-size:0.8rem; background:transparent; border:none;" onclick="copyUid()"><i class="fas fa-copy"></i></button>
+                <div class="settings-grid">
+                    
+                    <div class="setting-group setting-full">
+                        <span class="setting-label">User ID</span>
+                        <div class="uid-display">
+                            <span id="user-uid">LOADING...</span>
+                            <button class="nav-btn" style="padding: 2px 8px; font-size:0.8rem; background:transparent; border:none;" onclick="copyUid()"><i class="fas fa-copy"></i></button>
+                        </div>
                     </div>
-                </div>
-                
-                <div class="setting-group">
-                    <span class="setting-label">Search Engine</span>
-                    <div class="btn-row">
-                        <button class="engine-btn" onclick="setSearchEngine('brave')" id="btn-brave">Brave</button>
-                        <button class="engine-btn" onclick="setSearchEngine('bing')" id="btn-bing">Bing</button>
+                    
+                    <div class="setting-group">
+                        <span class="setting-label">Engine</span>
+                        <div class="btn-row">
+                            <button class="engine-btn" onclick="setSearchEngine('brave')" id="btn-brave">Brave</button>
+                            <button class="engine-btn" onclick="setSearchEngine('bing')" id="btn-bing">Bing</button>
+                        </div>
                     </div>
-                </div>
 
-                <div class="setting-group">
-                    <span class="setting-label">Panic Redirect</span>
-                    <select id="panic-preset" class="panic-select" onchange="updatePanicSettings()">
-                        <option value="classroom">Google Classroom</option>
-                        <option value="drive">Google Drive</option>
-                        <option value="forms">Google Forms</option>
-                        <option value="custom">Custom URL...</option>
-                    </select>
-                    <input type="text" id="panic-custom-input" class="panic-input" placeholder="https://..." oninput="saveCustomPanic()">
-                </div>
-                
-                <div class="setting-group">
-                    <span class="setting-label">Options & Tools</span>
-                    <div class="options-grid">
-                        <button class="nav-btn-settings" onclick="openAboutBlank()"><i class="fas fa-user-secret"></i> Cloak</button>
+                    <div class="setting-group">
+                        <span class="setting-label">Tools</span>
+                         <button class="nav-btn-settings" onclick="openAboutBlank()"><i class="fas fa-user-secret"></i> Cloak</button>
+                         <button class="nav-btn-settings" onclick="exportSave()"><i class="fas fa-download"></i> Save</button>
+                    </div>
+
+                    <div class="setting-group setting-full">
+                        <span class="setting-label">Panic Redirect</span>
+                        <select id="panic-preset" class="panic-select" onchange="updatePanicSettings()">
+                            <option value="classroom">Google Classroom</option>
+                            <option value="drive">Google Drive</option>
+                            <option value="forms">Google Forms</option>
+                            <option value="custom">Custom URL...</option>
+                        </select>
+                        <input type="text" id="panic-custom-input" class="panic-input" placeholder="https://..." oninput="saveCustomPanic()">
+                    </div>
+                    
+                    <div class="setting-group">
+                        <span class="setting-label">Visuals</span>
                         <button class="nav-btn-settings" onclick="toggleParticles()"><i class="fas fa-star"></i> Stars</button>
                         <button class="nav-btn-settings" onclick="toggleCursor()"><i class="fas fa-mouse-pointer"></i> Cursor</button>
-                        <button class="nav-btn-settings" onclick="exportSave()"><i class="fas fa-download"></i> Save</button>
                     </div>
-                </div>
 
-                <div class="setting-group">
-                    <span class="setting-label">Danger Zone</span>
-                    <div class="options-grid">
+                    <div class="setting-group">
+                        <span class="setting-label">Danger</span>
                          <button class="nav-btn-settings" onclick="importSave()"><i class="fas fa-upload"></i> Load</button>
                          <button class="nav-btn-settings reset-btn" onclick="if(confirm('Reset all data? This cannot be undone.')){localStorage.clear(); location.reload();}"><i class="fas fa-trash"></i> Reset</button>
                     </div>
+
                 </div>
 
             </div>
