@@ -199,11 +199,18 @@
             letter-spacing: 0.5px;
         }
 
+        .network-links-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 40px;
+        }
+
         .network-link {
             font-size: 0.85rem;
             color: #60a5fa; /* Blue accent */
             text-decoration: none;
-            margin-bottom: 40px;
             border-bottom: 1px solid transparent;
             transition: 0.3s;
             cursor: pointer;
@@ -479,7 +486,11 @@
             <div class="logo-text">hunters proxy</div>
             <div class="sub-text" id="rotator">initializing...</div>
             <div class="network-text">A site apart of infamous network.</div>
-            <a href="https://infamous-education.hotelconsuladoinn.com/" target="_blank" class="network-link">Visit Infamous Network</a>
+            
+            <div class="network-links-wrapper">
+                <a href="https://infamous-education.hotelconsuladoinn.com/" target="_blank" class="network-link">Visit Infamous Network</a>
+                <a href="https://discord.gg/7cKrfMEz2A" target="_blank" class="network-link">Join Infamous Network</a>
+            </div>
             
             <div class="search-container">
                 <i class="fas fa-globe search-icon"></i>
