@@ -2,7 +2,7 @@
 
 <html lang="en-us">
 <head>
-<base href="https://rawcdn.githack.com/genizy/brainrot/main/seat-jam-3d/">
+<base href="https://cdn.jsdelivr.net/gh/genizy/brainrot@main/kaji-run/">
 <meta charset="utf-8"/>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
@@ -51,14 +51,14 @@
 <script>
         const hideFullScreenButton = "";
         const buildUrl = "Build";
-        const loaderUrl = buildUrl + "/SeatJam.loader.js";
+        const loaderUrl = buildUrl + "/KojiRun.loader.js";
         const config = {
-            dataUrl: buildUrl + "/8daa97d329e03a43bfdd7b83f551f98e.data",
-            frameworkUrl: buildUrl + "/adbe1ffb5814b72fd9480068f2da50f3.js",
-            codeUrl: buildUrl + "/cfe03f7c1ba8acd898bd61ffafda1b58.wasm",
+            dataUrl: buildUrl + "/dcdc1e0926252712708982007c126653.data.unityweb",
+            frameworkUrl: buildUrl + "/48de42ecaee79dde2775035c448777da.js.unityweb",
+            codeUrl: buildUrl + "/60cc508de8ff84ef26bef1a133b9de5e.wasm.unityweb",
         streamingAssetsUrl: "StreamingAssets",
             companyName: "Butcher’s Games",
-            productName: "Runner Template",
+            productName: "Koji Run",
             productVersion: "0.01"
         };
 
@@ -202,9 +202,6 @@ console.log('Init Envir ysdk');
 
 playerData = await InitPlayer();
 console.log('Init Player ysdk');
-
-flasgsData = await GetFlags();
-console.log('Init Flags ysdk');
 
 
             } catch (e) {
@@ -756,11 +753,6 @@ function RequestingEnvironmentData(sendback) {
     });
 }
 
-window.addEventListener('beforeunload', (event) => {
-	if(myGameInstance != null) 
-		myGameInstance.SendMessage('YandexGame', '_SaveProgress'); 
-	});
-
 
 var playerData = 'noData';
 
@@ -845,41 +837,6 @@ function OpenAuthDialog() {
             console.log('CRASH Open Auth Dialog: ', e.message);
         }
     }
-}
-
-
-let flasgsData = "null";
-
-function GetFlags() {
-    return new Promise((resolve) => {
-        if (ysdk == null) {
-            resolve('null');
-            return;
-        }
-        try {
-            ysdk.getFlags().then(flags => {
-                let names = [];
-                let values = [];
-
-                for (let key in flags) {
-                    if (flags.hasOwnProperty(key)) {
-                        names.push(key);
-                        values.push(flags[key]);
-                    }
-                }
-
-                let jsonFlags = {
-                    "names": names,
-                    "values": values
-                };
-
-                resolve(JSON.stringify(jsonFlags));
-            });
-        } catch (e) {
-            console.error('CRASH Get Flags: ', e.message);
-            resolve('null');
-        }
-    });
 }
 
 

@@ -2,7 +2,7 @@
 
 <html lang="en-us">
 <head>
-<base href="https://rawcdn.githack.com/genizy/brainrot/main/seat-jam-3d/">
+<base href="https://rawcdn.githack.com/genizy/brainrot/main/make-a-superboat/">
 <meta charset="utf-8"/>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
@@ -51,15 +51,15 @@
 <script>
         const hideFullScreenButton = "";
         const buildUrl = "Build";
-        const loaderUrl = buildUrl + "/SeatJam.loader.js";
+        const loaderUrl = buildUrl + "/Boat evo fix 16(no cheats).loader.js";
         const config = {
-            dataUrl: buildUrl + "/8daa97d329e03a43bfdd7b83f551f98e.data",
-            frameworkUrl: buildUrl + "/adbe1ffb5814b72fd9480068f2da50f3.js",
-            codeUrl: buildUrl + "/cfe03f7c1ba8acd898bd61ffafda1b58.wasm",
+            dataUrl: buildUrl + "/9224a54f70bb3b24293b76b9b4d45de6.data.unityweb",
+            frameworkUrl: buildUrl + "/e941bf0a998d3351e7ad6b4d899aeb3a.js.unityweb",
+            codeUrl: buildUrl + "/bf493b00e7eab3c078c1a963105b83f4.wasm.unityweb",
         streamingAssetsUrl: "StreamingAssets",
-            companyName: "Butcher’s Games",
-            productName: "Runner Template",
-            productVersion: "0.01"
+            companyName: "DefaultCompany",
+            productName: "Boat Evolution URP",
+            productVersion: "0.1.0"
         };
 
         const container = document.querySelector("#unity-container");
@@ -755,11 +755,6 @@ function RequestingEnvironmentData(sendback) {
         }
     });
 }
-
-window.addEventListener('beforeunload', (event) => {
-	if(myGameInstance != null) 
-		myGameInstance.SendMessage('YandexGame', '_SaveProgress'); 
-	});
 
 
 var playerData = 'noData';

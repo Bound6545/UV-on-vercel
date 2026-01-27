@@ -2,7 +2,7 @@
 
 <html lang="en-us">
 <head>
-<base href="https://rawcdn.githack.com/genizy/brainrot/main/seat-jam-3d/">
+<base href="https://rawcdn.githack.com/genizy/brainrot/main/giant-wanted/">
 <meta charset="utf-8"/>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
@@ -51,15 +51,15 @@
 <script>
         const hideFullScreenButton = "";
         const buildUrl = "Build";
-        const loaderUrl = buildUrl + "/SeatJam.loader.js";
+        const loaderUrl = buildUrl + "/bb0d9ecdb05db3e84da20bd14a4f84dc.loader.js";
         const config = {
-            dataUrl: buildUrl + "/8daa97d329e03a43bfdd7b83f551f98e.data",
-            frameworkUrl: buildUrl + "/adbe1ffb5814b72fd9480068f2da50f3.js",
-            codeUrl: buildUrl + "/cfe03f7c1ba8acd898bd61ffafda1b58.wasm",
+            dataUrl: buildUrl + "/1eb373845d6855a1c77899b98367c671.data",
+            frameworkUrl: buildUrl + "/17b55d1fae10a27a151df7de1a254a5d.framework.js",
+            codeUrl: buildUrl + "/9faca01400f10667018e26f5c8ab1473.wasm",
         streamingAssetsUrl: "StreamingAssets",
-            companyName: "Butcher’s Games",
-            productName: "Runner Template",
-            productVersion: "0.01"
+            companyName: "DefaultCompany",
+            productName: "GaintWanted",
+            productVersion: "0.1"
         };
 
         const container = document.querySelector("#unity-container");
@@ -755,11 +755,6 @@ function RequestingEnvironmentData(sendback) {
         }
     });
 }
-
-window.addEventListener('beforeunload', (event) => {
-	if(myGameInstance != null) 
-		myGameInstance.SendMessage('YandexGame', '_SaveProgress'); 
-	});
 
 
 var playerData = 'noData';

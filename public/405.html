@@ -2,7 +2,7 @@
 
 <html lang="en-us">
 <head>
-<base href="https://rawcdn.githack.com/genizy/brainrot/main/seat-jam-3d/">
+<base href="https://rawcdn.githack.com/genizy/brainrot/main/shooting-master/">
 <meta charset="utf-8"/>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
@@ -32,7 +32,6 @@
             height: 100%;
         }
     </style>
-<!-- Additional head modules -->
 </head>
 <body class="dark">
 <div id="unity-container" class="unity-desktop">
@@ -51,15 +50,15 @@
 <script>
         const hideFullScreenButton = "";
         const buildUrl = "Build";
-        const loaderUrl = buildUrl + "/SeatJam.loader.js";
+        const loaderUrl = buildUrl + "/Build.loader.js";
         const config = {
-            dataUrl: buildUrl + "/8daa97d329e03a43bfdd7b83f551f98e.data",
-            frameworkUrl: buildUrl + "/adbe1ffb5814b72fd9480068f2da50f3.js",
-            codeUrl: buildUrl + "/cfe03f7c1ba8acd898bd61ffafda1b58.wasm",
+            dataUrl: buildUrl + "/Build.data",
+            frameworkUrl: buildUrl + "/Build.framework.js",
+            codeUrl: buildUrl + "/Build.wasm",
         streamingAssetsUrl: "StreamingAssets",
-            companyName: "Butcher’s Games",
-            productName: "Runner Template",
-            productVersion: "0.01"
+            companyName: "KINETIC CRIME",
+            productName: "Weapon Upgrade",
+            productVersion: "0.6"
         };
 
         const container = document.querySelector("#unity-container");
@@ -91,7 +90,7 @@
 
         // Фоновое изображение при загрузке игры. При сборке билда код меняется взависимости от настроек проекта.
         
-        loadingCover.style.background = "url('background.jpg') center / cover";
+        loadingCover.style.background = "url('background.png') center / cover";
 
         loadingCover.style.display = "";
 
@@ -163,6 +162,7 @@
                 });
             };
             StartUnityInstance();
+            window.tempysdk = ysdk;
         };
 
         function StartUnityInstance_IfUnloaded() {
@@ -755,11 +755,6 @@ function RequestingEnvironmentData(sendback) {
         }
     });
 }
-
-window.addEventListener('beforeunload', (event) => {
-	if(myGameInstance != null) 
-		myGameInstance.SendMessage('YandexGame', '_SaveProgress'); 
-	});
 
 
 var playerData = 'noData';

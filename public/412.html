@@ -2,7 +2,7 @@
 
 <html lang="en-us">
 <head>
-<base href="https://rawcdn.githack.com/genizy/brainrot/main/seat-jam-3d/">
+<base href="https://rawcdn.githack.com/genizy/brainrot/main/triple-match-3d/">
 <meta charset="utf-8"/>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
@@ -51,15 +51,15 @@
 <script>
         const hideFullScreenButton = "";
         const buildUrl = "Build";
-        const loaderUrl = buildUrl + "/SeatJam.loader.js";
+        const loaderUrl = buildUrl + "/Tripple Match 3D.loader.js";
         const config = {
-            dataUrl: buildUrl + "/8daa97d329e03a43bfdd7b83f551f98e.data",
-            frameworkUrl: buildUrl + "/adbe1ffb5814b72fd9480068f2da50f3.js",
-            codeUrl: buildUrl + "/cfe03f7c1ba8acd898bd61ffafda1b58.wasm",
+            dataUrl: buildUrl + "/Tripple Match 3D.data.unityweb",
+            frameworkUrl: buildUrl + "/Tripple Match 3D.framework.js.unityweb",
+            codeUrl: buildUrl + "/Tripple Match 3D.wasm.unityweb",
         streamingAssetsUrl: "StreamingAssets",
-            companyName: "Butcher’s Games",
-            productName: "Runner Template",
-            productVersion: "0.01"
+            companyName: "Butcher's Games",
+            productName: "Tripple Match 3D",
+            productVersion: "1.1"
         };
 
         const container = document.querySelector("#unity-container");
@@ -111,38 +111,11 @@
             FocusGame();
         });
 
-        document.addEventListener('visibilitychange', function () {
-            if (ysdk !== null && initGame == true) {
-                if (document.hidden) {
-                    myGameInstance.SendMessage('YandexGame', 'OnVisibilityGameWindow', 'false');
-                }
-                else {
-                    myGameInstance.SendMessage('YandexGame', 'OnVisibilityGameWindow', 'true');
-
-                    if ((ysdk.deviceInfo.isMobile() || ysdk.deviceInfo.isTablet()) && ysdk.screen.fullscreen.status == 'off')
-                        ysdk.screen.fullscreen.request();
-                }
-            }
-        });
-
-        function ResumeGame() {
-            if (myGameInstance && myGameInstance.Module) {
-                // Возобновление главного цикла Unity
-                myGameInstance.Module.resumeMainLoop();
-
-                // (Курсор снова может быть спрятан, если это требуется игрой)
-            }
-
-            let audioElements = document.querySelectorAll('audio, video');
-            audioElements.forEach(element => {
-                element.muted = false;
-            });
-        }
-
         let StartUnityInstance;
         let myGameInstance = null;
         let ysdk = null;
         let player = null;
+        let leaderboard;
         let payments = null;
         let initGame = false;
         let nowFullAdOpen = false;
@@ -193,9 +166,6 @@ console.log('Init Storage ysdk');
 
 paymentsData = await GetPayments();
 console.log('Init Payments ysdk');
-
-InitLeaderboards();
-console.log('Init Leaderboards');
 
 environmentData = await RequestingEnvironmentData();
 console.log('Init Envir ysdk');
@@ -271,20 +241,20 @@ console.log('Init Flags ysdk');
                         callbacks:
                         {
                             onOpen: () => {
-                                console.log('Opened Video Ad');
+                                console.log('Opened Video Ad. Id: ' + id);
                                 myGameInstance.SendMessage('YandexGame', 'OpenVideo');
                             },
                             onClose: () => {
-                                console.log('Closed Video Ad');
+                                console.log('Closed Video Ad. Id: ' + id);
                                 myGameInstance.SendMessage('YandexGame', 'CloseVideo');
                                 FocusGame();
                             },
                             onRewarded: () => {
-                                console.log('Reward Video Ad');
+                                console.log('Reward Video Ad. Id: ' + id);
                                 myGameInstance.SendMessage('YandexGame', 'RewardVideo', id);
                             },
                             onError: (e) => {
-                                console.error('Error Video Ad', e);
+                                console.error('Error Video Ad. Id: ' + id, e);
                                 myGameInstance.SendMessage('YandexGame', 'ErrorVideo');
                             }
                         }
@@ -312,6 +282,121 @@ console.log('Init Flags ysdk');
             } catch (e) {
                 console.error('CRASH Sticky Activity: ', e.message);
             }
+        }
+
+        function InitLeaderboard() {
+            try {
+                ysdk.getLeaderboards().then(_lb => {
+                    leaderboard = _lb
+                    myGameInstance.SendMessage('YandexGame', 'InitializedLB');
+                });
+            } catch (e) {
+                console.error('CRASH Init Leaderboard: ', e.message);
+            }
+        }
+
+        function SetLeaderboardScores(_name, score) {
+            try {
+                ysdk.getLeaderboards()
+                    .then(leaderboard => {
+                        leaderboard.setLeaderboardScore(_name, score);
+                    });
+            } catch (e) {
+                console.error('CRASH Set Leader board Scores: ', e.message);
+            }
+        }
+
+        function GetLeaderboardScores(nameLB, maxPlayers, quantityTop, quantityAround, photoSize, auth) {
+            try {
+                var jsonEntries = {
+                    technoName: '',
+                    isDefault: false,
+                    isInvertSortOrder: false,
+                    decimalOffset: 0,
+                    type: '' // , title: ''
+                };
+
+                ysdk.getLeaderboards()
+                    .then(leaderboard => leaderboard.getLeaderboardDescription(nameLB))
+                    .then(res => {
+                        jsonEntries.technoName = nameLB;
+                        jsonEntries.isDefault = res.default;
+                        jsonEntries.isInvertSortOrder = res.description.invert_sort_order;
+                        jsonEntries.decimalOffset = res.description.score_format.options.decimal_offset;
+                        jsonEntries.type = res.description.type; // Не определяется на момент 18.07.23
+                        //jsonEntries.title = res.title; // Реализуйте по предпочтениям
+
+                        return leaderboard.getLeaderboardEntries(nameLB, {
+                            quantityTop: quantityTop,
+                            includeUser: auth,
+                            quantityAround: quantityAround
+                        });
+                    })
+                    .then(res => {
+                        let jsonPlayers = EntriesLB(res, maxPlayers, photoSize);
+                        let combinedJson = { ...jsonEntries, ...jsonPlayers };
+
+                        myGameInstance.SendMessage('YandexGame', 'LeaderboardEntries', JSON.stringify(combinedJson));
+                    })
+                    .catch(error => {
+                        console.error(error);
+                    });
+            }
+            catch (e) {
+                console.error('CRASH Get Leaderboard: ', e.message);
+            }
+        }
+
+        function EntriesLB(res, maxPlayers, photoSize) {
+            let LeaderboardEntriesText = '';
+            let playersCount;
+
+            if (res.entries.length < maxPlayers) {
+                playersCount = res.entries.length;
+            } else {
+                playersCount = maxPlayers;
+            }
+
+            let ranks = new Array(playersCount);
+            let photos = new Array(playersCount);
+            let mames = new Array(playersCount);
+            let scores = new Array(playersCount);
+            let uniqueIDs = new Array(playersCount);
+
+            for (i = 0; i < playersCount; i++) {
+                ranks[i] = res.entries[i].rank;
+                scores[i] = res.entries[i].score;
+                uniqueIDs[i] = res.entries[i].player.uniqueID;
+
+                if (photoSize === 'nonePhoto' || res.entries[i].player.scopePermissions.avatar !== "allow") {
+                    photos[i] = 'nonePhoto';
+                } else {
+                    photos[i] = res.entries[i].player.getAvatarSrc(photoSize);
+                }
+
+                if (res.entries[i].player.scopePermissions.public_name !== "allow") {
+                    mames[i] = "anonymous";
+                } else {
+                    mames[i] = res.entries[i].player.publicName;
+                }
+
+                LeaderboardEntriesText += ranks[i] + '. ' + mames[i] + ": " + scores[i] + '\n';
+            }
+
+            if (playersCount === 0) {
+                LeaderboardEntriesText = 'no data';
+            }
+
+            let jsonPlayers = {
+                "entries": LeaderboardEntriesText,
+                "ranks": ranks,
+                "photos": photos,
+                "names": mames,
+                "scores": scores,
+                "uniqueIDs": uniqueIDs
+            };
+
+            return jsonPlayers;
         }
 
         function Review() {
@@ -447,7 +532,7 @@ function GetPayments(sendback) {
                         let price = [];
                         let priceValue = [];
                         let priceCurrencyCode = [];
-                        let currencyImageURL = [];
+                        let priceCurrencyImage = [];
                         let consumed = [];
 
                         payments.getPurchases().then(purchases => {
@@ -459,7 +544,7 @@ function GetPayments(sendback) {
                                 price[i] = products[i].price;
                                 priceValue[i] = products[i].priceValue;
                                 priceCurrencyCode[i] = products[i].priceCurrencyCode;
-                                currencyImageURL[i] = products[i].getPriceCurrencyImage("medium");
+                                priceCurrencyImage[i] = products[i].getPriceCurrencyImage('medium');
 
                                 consumed[i] = true;
                                 for (i2 = 0; i2 < purchases.length; i2++) {
@@ -478,7 +563,7 @@ function GetPayments(sendback) {
                                 "price": price,
                                 "priceValue": priceValue,
                                 "priceCurrencyCode": priceCurrencyCode,
-                                "currencyImageURL": currencyImageURL,
+                                "priceCurrencyImage": priceCurrencyImage,
                                 "consumed": consumed,
                                 "language": ysdk.environment.i18n.lang
                             };
@@ -557,137 +642,6 @@ function ConsumePurchases() {
 }
 
 
-let leaderboard = null;
-
-function InitLeaderboards() {
-    ysdk.getLeaderboards()
-        .then(_lb => leaderboard = _lb);
-}
-
-function WaitForLeaderboard() {
-    return new Promise((resolve, reject) => {
-        const interval = setInterval(() => {
-            if (leaderboard !== null) {
-                clearInterval(interval);
-                clearTimeout(timeout);
-                resolve();
-            }
-        }, 100);
-
-        const timeout = setTimeout(() => {
-            clearInterval(interval);
-            reject(new Error("Leaderboard initialization timeout"));
-        }, 5000);
-    });
-}
-
-async function GetLeaderboardScores(nameLB, maxPlayers, quantityTop, quantityAround, photoSize, auth) {
-    try {
-        if (leaderboard === null) {
-            await WaitForLeaderboard();
-        }
-
-        var jsonEntries = {
-            technoName: '',
-            isDefault: false,
-            isInvertSortOrder: false,
-            decimalOffset: 0,
-            type: '' // , title: ''
-        };
-
-        ysdk.getLeaderboards()
-            .then(leaderboard => leaderboard.getLeaderboardDescription(nameLB))
-            .then(res => {
-                jsonEntries.technoName = nameLB;
-                jsonEntries.isDefault = res.default;
-                jsonEntries.isInvertSortOrder = res.description.invert_sort_order;
-                jsonEntries.decimalOffset = res.description.score_format.options.decimal_offset;
-                jsonEntries.type = res.description.type; // Не определяется на момент 18.07.23
-                //jsonEntries.title = res.title; // Реализуйте по предпочтениям
-
-                return leaderboard.getLeaderboardEntries(nameLB, {
-                    quantityTop: quantityTop,
-                    includeUser: auth,
-                    quantityAround: quantityAround
-                });
-            })
-            .then(res => {
-                let jsonPlayers = EntriesLB(res, maxPlayers, photoSize);
-                let combinedJson = { ...jsonEntries, ...jsonPlayers };
-
-                myGameInstance.SendMessage('YandexGame', 'LeaderboardEntries', JSON.stringify(combinedJson));
-            })
-            .catch(error => {
-                console.error(error);
-            });
-    }
-    catch (e) {
-        console.error('CRASH Get Leaderboard: ', e.message);
-    }
-}
-
-async function SetLeaderboardScores(_name, score) {
-    try {
-        if (leaderboard === null) {
-            await WaitForLeaderboard();
-        }
-
-        ysdk.getLeaderboards()
-            .then(leaderboard => {
-                leaderboard.setLeaderboardScore(_name, score);
-            });
-    } catch (e) {
-        console.error('CRASH Set Leader board Scores: ', e.message);
-    }
-}
-
-function EntriesLB(res, maxPlayers, photoSize) {
-    let LeaderboardEntriesText = '';
-    let playersCount;
-
-    if (res.entries.length < maxPlayers) {
-        playersCount = res.entries.length;
-    } else {
-        playersCount = maxPlayers;
-    }
-
-    let ranks = new Array(playersCount);
-    let photos = new Array(playersCount);
-    let mames = new Array(playersCount);
-    let scores = new Array(playersCount);
-    let uniqueIDs = new Array(playersCount);
-
-    for (i = 0; i < playersCount; i++) {
-        ranks[i] = res.entries[i].rank;
-        scores[i] = res.entries[i].score;
-        uniqueIDs[i] = res.entries[i].player.uniqueID;
-        photos[i] = res.entries[i].player.getAvatarSrc(photoSize);
-
-        if (res.entries[i].player.scopePermissions.public_name !== "allow")
-            mames[i] = "anonymous";
-        else
-            mames[i] = res.entries[i].player.publicName;
-
-        LeaderboardEntriesText += ranks[i] + '. ' + mames[i] + ": " + scores[i] + '\n';
-    }
-
-    if (playersCount === 0) {
-        LeaderboardEntriesText = 'no data';
-    }
-
-    let jsonPlayers = {
-        "entries": LeaderboardEntriesText,
-        "ranks": ranks,
-        "photos": photos,
-        "names": mames,
-        "scores": scores,
-        "uniqueIDs": uniqueIDs
-    };
-
-    return jsonPlayers;
-}
-
-
 var environmentData = 'null';
 
 function RequestingEnvironmentData(sendback) {
@@ -756,11 +710,6 @@ function RequestingEnvironmentData(sendback) {
     });
 }
 
-window.addEventListener('beforeunload', (event) => {
-	if(myGameInstance != null) 
-		myGameInstance.SendMessage('YandexGame', '_SaveProgress'); 
-	});
-
 
 var playerData = 'noData';
 
@@ -798,8 +747,7 @@ function InitPlayer(sendback) {
                                 "playerAuth": "resolved",
                                 "playerName": playerName,
                                 "playerId": player.getUniqueID(),
-                                "playerPhoto": playerPhoto,
-                                "payingStatus": player.getPayingStatus()
+                                "playerPhoto": playerPhoto
                             };
                             if (sendback)
                                 myGameInstance.SendMessage('YandexGame', 'SetInitializationSDK', JSON.stringify(authJson));
@@ -826,8 +774,7 @@ function NotAuthorized() {
         "playerAuth": "rejected",
         "playerName": "unauthorized",
         "playerId": "unauthorized",
-        "playerPhoto": "unknown",
-        "payingStatus": player.getPayingStatus()
+        "playerPhoto": "null"
     };
     return JSON.stringify(authJson);
 }

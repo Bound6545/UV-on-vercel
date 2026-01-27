@@ -2,7 +2,7 @@
 
 <html lang="en-us">
 <head>
-<base href="https://rawcdn.githack.com/genizy/brainrot/main/seat-jam-3d/">
+<base href="https://cdn.jsdelivr.net/gh/genizy/brainrot@main/survive-to-victory/">
 <meta charset="utf-8"/>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
@@ -51,15 +51,15 @@
 <script>
         const hideFullScreenButton = "";
         const buildUrl = "Build";
-        const loaderUrl = buildUrl + "/SeatJam.loader.js";
+        const loaderUrl = buildUrl + "/WhoDiesLast_YG.loader.js";
         const config = {
-            dataUrl: buildUrl + "/8daa97d329e03a43bfdd7b83f551f98e.data",
-            frameworkUrl: buildUrl + "/adbe1ffb5814b72fd9480068f2da50f3.js",
-            codeUrl: buildUrl + "/cfe03f7c1ba8acd898bd61ffafda1b58.wasm",
+            dataUrl: buildUrl + "/2bb4d9cd5decf0089eea2d49e389deb6.data.unityweb",
+            frameworkUrl: buildUrl + "/3928cb353505c4bf547df4b7c9f67143.js.unityweb",
+            codeUrl: buildUrl + "/d4b1d81618b67f65e8521490b7099eda.wasm.unityweb",
         streamingAssetsUrl: "StreamingAssets",
-            companyName: "Butcher’s Games",
-            productName: "Runner Template",
-            productVersion: "0.01"
+            companyName: "C Games",
+            productName: "Who Dies Last",
+            productVersion: "1.0"
         };
 
         const container = document.querySelector("#unity-container");
@@ -755,11 +755,6 @@ function RequestingEnvironmentData(sendback) {
         }
     });
 }
-
-window.addEventListener('beforeunload', (event) => {
-	if(myGameInstance != null) 
-		myGameInstance.SendMessage('YandexGame', '_SaveProgress'); 
-	});
 
 
 var playerData = 'noData';
