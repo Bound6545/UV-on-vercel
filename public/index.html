@@ -22,6 +22,7 @@
     </script>
 
     <script>
+        /* VERCEL NATIVE CONFIGURATION */
         function configureUV() {
             if (!self.__uv$config) {
                 self.__uv$config = {
@@ -208,7 +209,7 @@
 
         .network-link {
             font-size: 0.85rem;
-            color: #60a5fa; 
+            color: #60a5fa; /* Blue accent */
             text-decoration: none;
             border-bottom: 1px solid transparent;
             transition: 0.3s;
@@ -317,7 +318,7 @@
         }
         .browser-nav-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
 
-        
+        /* ADDRESS BAR */
         .browser-address-bar {
             flex: 1;
             background: rgba(0,0,0,0.3);
@@ -901,7 +902,11 @@
             tabBtn.className = 'tab';
             tabBtn.id = `tab-btn-${id}`;
             tabBtn.onclick = () => switchTab(id);
-            tabBtn.innerHTML = `<br>                <i class="fas fa-globe tab-icon"></i><br>                <span class="tab-title">${name}</span><br>                <i class="fas fa-times tab-close" onclick="closeTab(event, ${id})"></i><br>            `;
+            tabBtn.innerHTML = `
+                <i class="fas fa-globe tab-icon"></i>
+                <span class="tab-title">${name}</span>
+                <i class="fas fa-times tab-close" onclick="closeTab(event, ${id})"></i>
+            `;
             tabList.appendChild(tabBtn);
 
             const wrapper = document.getElementById('iframe-wrapper');
@@ -995,7 +1000,11 @@
         
         function closeGame() {
             document.getElementById('tabs-list').innerHTML = '';
-            document.getElementById('iframe-wrapper').innerHTML = `<br>                <div id="loading-overlay"><br>                    <div class="spinner"></div><br>                    <div class="loading-text">Loading content...</div><br>                </div>`;
+            document.getElementById('iframe-wrapper').innerHTML = `
+                <div id="loading-overlay">
+                    <div class="spinner"></div>
+                    <div class="loading-text">Loading content...</div>
+                </div>`;
             tabs = [];
             activeTabId = null;
             setView('home');
@@ -1060,7 +1069,12 @@
                     const favClass = isFav ? 'active' : '';
                     let displayName = g.name || g.url.replace('.html', '');
                     
-                    html += `<br>                    <div class="game-card" onclick="openGame('${g.url}', '${displayName.replace(/'/g, "\\'")}')"><br>                        <i class="fas fa-star fav-btn ${favClass}" onclick="toggleFavorite(event, '${g.url}')"></i><br>                        <i class="fas ${g.icon} game-icon"></i><br>                        <span>${displayName}</span><br>                    </div>`;
+                    html += `
+                    <div class="game-card" onclick="openGame('${g.url}', '${displayName.replace(/'/g, "\\'")}')">
+                        <i class="fas fa-star fav-btn ${favClass}" onclick="toggleFavorite(event, '${g.url}')"></i>
+                        <i class="fas ${g.icon} game-icon"></i>
+                        <span>${displayName}</span>
+                    </div>`;
                 });
                 html += `</div>`;
                 return html;
