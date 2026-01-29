@@ -180,12 +180,9 @@
         
         .view { 
             position: absolute; width: 100%; height: 100%; display: flex; flex-direction: column; 
-            /* CENTERED LAYOUT RESTORED */
-            align-items: center; justify-content: center; 
-            opacity: 0; pointer-events: none; 
+            align-items: center; justify-content: center; opacity: 0; pointer-events: none; 
             transform: scale(0.95) translateY(20px); filter: blur(10px); 
-            transition: 0.6s var(--ease-out); 
-            padding-top: 80px; 
+            transition: 0.6s var(--ease-out); padding-top: 80px; 
         }
         .view.active { opacity: 1; pointer-events: auto; transform: scale(1) translateY(0); filter: blur(0); }
 
@@ -212,7 +209,7 @@
 
         .network-link {
             font-size: 0.85rem;
-            color: #60a5fa; 
+            color: #60a5fa; /* Blue accent */
             text-decoration: none;
             border-bottom: 1px solid transparent;
             transition: 0.3s;
@@ -500,11 +497,6 @@
                 <input type="text" class="search-bar" id="proxy-input" placeholder="Search or enter a link...">
             </div>
             
-            <div id="side-ad" style="position: fixed; right: 10px; top: 50%; transform: translateY(-50%); width: 160px; height: 600px; z-index: 9999;">
-                 <iframe data-aa='2425827' src='//acceptable.a-ads.com/2425827/?size=Adaptive'
-                            style='border:0; padding:0; width:100%; height:100%; overflow:hidden; display: block;'></iframe>
-            </div>
-
             <div class="shortcuts-grid">
                 <div class="shortcut-item" onclick="openGame('https://youtube.com', 'YouTube')"><i class="fab fa-youtube"></i><div class="shortcut-label">YouTube</div></div>
                 <div class="shortcut-item" onclick="openGame('https://discord.com', 'Discord')"><i class="fab fa-discord"></i><div class="shortcut-label">Discord</div></div>
