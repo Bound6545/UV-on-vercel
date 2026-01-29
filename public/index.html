@@ -22,7 +22,6 @@
     </script>
 
     <script>
-        
         function configureUV() {
             if (!self.__uv$config) {
                 self.__uv$config = {
@@ -71,6 +70,14 @@
             const customInput = document.getElementById('panic-custom-input');
             if(customInput) customInput.value = savedCustom;
             
+            // dumbass performance slider
+            const savedPerf = localStorage.getItem('hunters_perf_level') || 1;
+            const slider = document.getElementById('perf-slider');
+            if(slider) {
+                slider.value = savedPerf;
+                updatePerformance(savedPerf);
+            }
+
             renderGameLibrary();
             showLoadNotification();
         });
@@ -444,6 +451,49 @@
             margin-top: 10px; font-family: monospace; user-select: text;
         }
 
+        /* anim slider */
+        .slider-container { width: 100%; display: flex; flex-direction: column; gap: 10px; margin-top: 5px; }
+        .slider-labels { display: flex; justify-content: space-between; font-size: 0.75rem; color: #888; font-weight: 600; text-transform: uppercase; padding: 0 5px; }
+        
+        .perf-slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 10px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            outline: none;
+            transition: background 0.3s;
+        }
+
+        /* fucking animations stop looking at my code to see if im skidding asshole */
+        .perf-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 22px; 
+            height: 22px; 
+            background: #fff; 
+            border-radius: 50%; 
+            cursor: pointer; 
+            box-shadow: 0 0 15px rgba(255,255,255,0.8);
+            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1); /* spying phyiscs thingy */
+            margin-top: -6px; /* idk */
+        }
+
+        .perf-slider:active::-webkit-slider-thumb {
+            transform: scale(1.2); /* uhh idk what this is either */
+        }
+
+        .perf-slider::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 10px;
+            cursor: pointer;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+        }
+
+        /* something to do with no stars */
+        body.perf-medium .stars { display: none !important; }
+
     </style>
 </head>
 <body>
@@ -605,6 +655,17 @@
                 </div>
 
                 <div class="settings-grid">
+                    
+                    <div class="setting-group setting-full">
+                        <span class="setting-label">Graphics Quality</span>
+                        <div class="slider-container">
+                            <input type="range" min="0" max="1" step="1" value="1" class="perf-slider" id="perf-slider" oninput="updatePerformance(this.value)">
+                            <div class="slider-labels">
+                                <span>Balanced</span>
+                                <span>Ultra</span>
+                            </div>
+                        </div>
+                    </div>
                     
                     <div class="setting-group setting-full">
                         <span class="setting-label">User ID</span>
@@ -1145,6 +1206,18 @@
         function toggleParticles() { 
             particlesOn = !particlesOn; 
             starContainer.style.display = particlesOn ? 'block' : 'none'; 
+        }
+
+        // slider ass logic
+        
+        function updatePerformance(val) {
+            // idk what this does but it works
+            if(val == 0) {
+                document.body.classList.add('perf-medium'); // turns off stars
+            } else {
+                document.body.classList.remove('perf-medium'); // turns everything on
+            }
+            localStorage.setItem('hunters_perf_level', val);
         }
 
     </script>
