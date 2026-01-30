@@ -21,7 +21,7 @@
         }
     </script>
 
-    <script>
+    <script> /* uv stuff*/
         function configureUV() {
             if (!self.__uv$config) {
                 self.__uv$config = {
@@ -114,11 +114,11 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', 'Segoe UI', sans-serif; cursor: none; }
-        
+         /*cursor*/
         body.default-cursor * { cursor: auto !important; }
         body.default-cursor #custom-cursor, body.default-cursor #cursor-trail { display: none !important; }
         body.in-game * { cursor: auto !important; }
-        body.in-game #custom-cursor, body.in-game #cursor-trail { display: none !important; }
+        body.in-game #custom-cursor, body.in-game #cursor-trail { display: none !important; } 
 
         body {
             background-color: var(--bg-color);
@@ -152,7 +152,7 @@
             filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));
             transform-origin: top left; transition: transform 0.1s var(--ease-out);
         }
-        #cursor-trail {
+        #cursor-trail { /*the thinginy thing*/
             position: fixed; top: 0; left: 0; width: 40px; height: 40px;
             background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
             border-radius: 50%; pointer-events: none; z-index: 9998;
@@ -355,7 +355,7 @@
         .spinner { width: 50px; height: 50px; border: 3px solid rgba(255,255,255,0.1); border-top: 3px solid #fff; border-radius: 50%; animation: spin 0.8s infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        .settings-panel { 
+        .settings-panel { /* this might be the settings panel?*/
             background: rgba(15, 15, 15, 0.9);
             backdrop-filter: blur(40px);
             -webkit-backdrop-filter: blur(40px);
@@ -507,8 +507,8 @@
         <i class="fas fa-check-circle"></i>
         <span id="load-notif-text">Loading...</span>
     </div>
-
-    <nav class="navbar">
+    
+    <nav class="navbar"> 
         <button class="nav-btn active" onclick="setView('home', this)"><i class="fas fa-search"></i> Proxy</button>
         <button class="nav-btn" onclick="setView('apps', this)"><i class="fas fa-th"></i> Apps</button>
         <button class="nav-btn" onclick="setView('games', this)"><i class="fas fa-gamepad"></i> Games</button>
@@ -519,7 +519,7 @@
         <button class="nav-btn panic-btn" onclick="triggerPanic()" title="Panic! (Key: ])"><i class="fas fa-sign-out-alt"></i> Panic</button>
     </nav>
 
-    <div id="music-player">
+    <div id="music-player"> 
         <div class="player-header" id="player-drag-handle">
             <div class="player-title"><i class="fas fa-headphones-alt" style="color:#1db954;"></i> Music Player</div>
             <button class="player-close" onclick="toggleMusic()"><i class="fas fa-times"></i></button>
@@ -531,8 +531,8 @@
     </div>
 
     <div class="container">
-        
-        <div id="home" class="view active">
+            
+        <div id="home" class="view active"> /* 
             <div class="logo-text">hunters proxy</div>
             <div class="sub-text" id="rotator">initializing...</div>
             <div class="network-text">A site apart of infamous network.</div>
@@ -553,7 +553,7 @@
                 <div class="shortcut-item" onclick="openGame('https://tiktok.com', 'TikTok')"><i class="fab fa-tiktok"></i><div class="shortcut-label">TikTok</div></div>
                 <div class="shortcut-item" onclick="openGame('https://google.com', 'Google')"><i class="fab fa-google"></i><div class="shortcut-label">Google</div></div>
                 <div class="shortcut-item" onclick="openGame('https://play.geforcenow.com', 'GeForce Now')"><i class="fas fa-bolt"></i><div class="shortcut-label">GeForce Now</div></div>
-                <div class="shortcut-item" onclick="openGame('https://now.gg/', 'now.gg')">
+                <div class="shortcut-item" onclick="openGame('https://nowgg.fun/', 'now.gg')">
                     <i class="fas fa-gamepad"></i>
                     <div class="shortcut-label">now.gg</div>
                 </div>
